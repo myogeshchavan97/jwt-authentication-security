@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { SIGN_IN, SIGN_OUT, BASE_API_URL } from '../utils/constants';
 import { initiateGetProfile } from './profile';
 import { history } from '../router/AppRouter';
@@ -13,12 +12,12 @@ export const signIn = (user) => ({
 export const initiateLogin = (email, password) => {
   return async (dispatch) => {
     try {
-      const result = await axios.post(`${BASE_API_URL}/signin`, {
+      const result = await post(`${BASE_API_URL}/signin`, {
         email,
         password
       });
       const user = result.data;
-      localStorage.setItem('user_token', user.token);
+      user.isAuthenticated = true;
       dispatch(signIn(user));
       dispatch(initiateGetProfile(user.email));
       history.push('/profile');
@@ -32,7 +31,7 @@ export const initiateLogin = (email, password) => {
 export const registerNewUser = (data) => {
   return async (dispatch) => {
     try {
-      await axios.post(`${BASE_API_URL}/signup`, data);
+      await post(`${BASE_API_URL}/signup`, data);
       return { success: true };
     } catch (error) {
       console.log('error', error);

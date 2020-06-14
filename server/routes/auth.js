@@ -76,6 +76,10 @@ Router.post('/signin', async (req, res) => {
         signin_error: 'Error while signing in..Try again later.'
       });
     }
+
+    res.cookie('token', token, {
+      httpOnly: true
+    });
     user.token = result.rows[0].access_token;
     res.send(user);
   } catch (error) {
